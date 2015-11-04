@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "postinstall": "gulp build && bower install"
   },
-  "engine": {
+  "engines": {
     "node": "0.12.0"
   },
   "dependencies": {
@@ -19,9 +19,9 @@
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
     "node-sass-middleware": "0.8.0",
-    "serve-favicon": "~2.3.0"
-  },
+    "serve-favicon": "~2.3.0",
+     "gulp-nodemon": "^2.0.4"
+ },
   "devDependencies": {
-    "gulp-nodemon": "^2.0.4"
   }
 }
