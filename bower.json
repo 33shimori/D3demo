@@ -1,0 +1,6 @@
+{
+  "name": "D3demo",
+  "dependencies": {
+    "d3": "~3.5.6"
+  }
+}
