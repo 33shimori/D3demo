@@ -1,0 +1,36 @@
+extends ../layout
+block content
+	svg(width="400", height="200")
+		circle
+		circle
+		circle
+		circle
+	script.
+		//create a data array containing objects
+		var data = [
+		{cx:50, cy:50, r:10, color: '#ff0000'},
+		{cx:150, cy:50, r:20, color: '#ff0066'},
+		{cx:250, cy:50, r:30, color: '#ff00aa'},
+		{cx:350, cy:50, r:40, color: '#ff00ff'}
+		];
+		// Bind data array to the Selection
+		var circles = d3.selectAll('circle').data(data);
+		// USe dynamic properties for the radius
+		circles.attr('r', function (d,i){return d.r});
+
+		circles
+		// Set the strok color to black
+		.attr('stroke', 'black')
+		// Set the fill color
+		.attr('fill', function(d,i){ return d.color;})
+		// Set the x coordinate of the center
+		// depending of the boud object
+		.attr('cx', function(d,i){return d.cx;})
+		// Set the y coordinate of the center
+		// depending of bound object
+		.attr('cy', function (d,i){return d.cy;});
+		// Set the stroke width
+		// depending on the index
+		circles.style('stroke-width', function (d,i){ return i*2;});
+
+

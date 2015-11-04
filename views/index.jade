@@ -1,0 +1,25 @@
+extends layout
+
+block content
+	h1= title
+	p Welcome to #{title}
+	p Some fruits:
+	p.item#first-item Apple
+	p.item#second-item Banana
+	p.item#third-item Orange
+
+	script(type="text/javascript").
+		// Select all p tags
+		var ps = d3.selectAll('p');
+		// Select all elements with the class 'item'
+		var item = d3.selectAll('.item');
+		// Select the first element with the id "first-item"
+		var first = d3.select('#first-item');
+
+		//Add a HTML attribute to all p tags
+		ps.attr('align', 'center');
+		// Change the background-color of the items
+		item.style('background-color', 'red');
+		// Remove the element #first-item for the DOM
+		first.remove();
+

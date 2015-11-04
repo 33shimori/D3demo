@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+	svg(width="200", height="120")
+		text(x="20", y="40") Some shapes:
+		rect.item#first-item(width="100", height="50", x="0", y="50")
+		circle.item#second-item(cx="150", cy="25", r="25")
+		line.item#third-item(x2="400", y2="100", style="stroke: black;")
+	script.
+		// Select all circle tags
+		var circ = d3.selectAll('circle');
+		// Select all element with the class "item"
+		var items = d3.selectAll('.item');
+		// Select the first element with the id 'first-item'
+		var first = d3.select('#first-item');
+		//Add a SVG attribute to all circle tags
+		circ.attr('r', '50');
+		// Change the fill color of th items.
+		items.style('fill', 'red');
+		// Remove the element #first-item from the DOM
+		first.remove();
+
