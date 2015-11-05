@@ -1,6 +1,7 @@
 {
   "name": "D3demo",
   "dependencies": {
-    "d3": "~3.5.6"
+    "d3": "~3.5.6",
+    "angular": "~1.4.7"
   }
 }

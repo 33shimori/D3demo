@@ -21,10 +21,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('node-sass-middleware')({
-  src: path.join(__dirname, 'stylesheets'),
+  src: path.join(__dirname),
   dest: path.join(__dirname, 'public'),
-  indentedSyntax: true,
-  sourceMap: true
+	debug: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 

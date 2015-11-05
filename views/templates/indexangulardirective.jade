@@ -1,0 +1,13 @@
+extends ../layoutangulardirective
+block content
+	div(ng-controller="mainCtrl")
+		<!-- We can use the visualization directives here -->
+
+		<!-- The fist chart -->
+		my-scatter-chart.chart(data="logs")
+
+		<!-- A second chart -->
+		my-scatter-chart.chart(data="logs")
+
+		<!-- Another chart -->
+		my-scatter-chart.chart(data="logs")
