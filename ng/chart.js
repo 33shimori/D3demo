@@ -13,9 +13,10 @@ angular.module('main').
 		svg
 		.attr('width', width)
 		.attr('height', height);
+
 		// Define a margin
 		var margin = 30;
-		// Define x-scal
+		// Define x-scale
 		var xScale = d3.time.scale()
 		.domain([
 			d3.min(data, function(d){ return d.time; }),
@@ -30,7 +31,8 @@ angular.module('main').
 
 		// Define y-scale
 		var yScale = d3.scale.linear()
-		.domain([0, d3.max(data, function (d){ return d.visitors; })])
+		.domain([0, d3.max(data, function (d){ return d.visitors; })
+		])
 		.range([margin, height-margin]);
 		//Define y-axis
 		var yAxis = d3.svg.axis()
@@ -44,20 +46,19 @@ angular.module('main').
 		.call(xAxis);
 		// Draw y-axis
 		svg.select('.y-axis')
-		.attr("transform", "translate(0, " + margin + ")")
+		.attr("transform", "translate(" + margin + ")")
 		.call(yAxis);
-
 		// Add new the data points
-		svg.select('.chart')
+		svg.select('.data')
 		.selectAll('circle').data(data)
 		.enter()
 		.append('circle');
 		// Update all data points
-		svg.select('.chart')
+		svg.select('.data')
 		.selectAll('circle').data(data)
-		.attr('r', 25)
-		.attr('cx', function(d){ console.log(xScale(d.time)); return xScale(d.time); })
-		.attr('cy', function(d){ return yScale(d.visitors);});
+		.attr('r', 2.5)
+		.attr('cx', function(d){  return xScale(d.time); })
+		.attr('cy', function(d){  return yScale(d.visitors);});
   }
 
 	return {
@@ -84,7 +85,7 @@ angular.module('main').
 		 // Watch the data attribute of the scope
 	 scope.$watch('data', function (newVal, oldVal, scope){
 
-		 // Update teh chart
+		 // Update the chart
 		 draw(svg, width, height, scope.data);
    }, true);
 		};

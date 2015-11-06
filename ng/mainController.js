@@ -5,7 +5,7 @@ angular.module('main')
 	// Random data point generator
 	var randPoint = function () {
 		var rand = Math.random;
-		return  {time: time.toString(), visitors: rand()*100}
+		return  {time: new Date(time.toString()), visitors: rand()*100}
   }
 	// we store a list of logs
 	$scope.logs = [ randPoint()];
