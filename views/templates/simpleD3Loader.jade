@@ -1,0 +1,10 @@
+extends ../layoutangulardirective
+block content
+	div(ng-controller="simpleD3LoaderMainCtrl")
+		h3 {{log.src}}
+		div(ng-repeat="l in log.data")
+			span key: : {{ l.key | date: 'medium' }}
+			span Elements: : {{ l.values }}
+			hr
+
+

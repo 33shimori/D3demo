@@ -1,0 +1,36 @@
+extends ../layout
+block content
+	button(onclick="timer()") Click
+
+	script.
+		var svg = d3.select("body").append("svg")
+		.attr("width", 800)
+		.attr("height", 400);
+
+		var circle = svg.append("circle")
+		.attr("class", "frame")
+		.attr("cx", 50)
+		.attr("cy", 50)
+		.attr("r", 25);
+
+		var blue = d3.rgb(0,0,255);
+		var red = d3.rgb(255,0,0);
+		var interpolate = d3.interpolateRgb(blue, red);
+
+		var duration = 1500;
+		var tickFn = function (elapsed){
+		var t = elapsed/duration;
+
+		if (t <=1.0){
+			circle.style("fill", interpolate(t));
+			}
+			else {
+				circle.style("fill", interpolate(1));
+				// end timer
+				return true;
+				}
+		}
+
+		function timer() {
+		d3.timer(tickFn);
+		}

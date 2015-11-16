@@ -1,0 +1,26 @@
+extends ../layout
+block content
+	button(onclick="transition()") Click
+
+	script.
+		var blue = d3.rgb(0,0,255);
+		var red = d3.rgb(255,0,0);
+		var duration = 500;
+
+		var svg = d3.select("body").append("svg")
+		.attr("width", 800)
+		.ttr("height", 400);
+
+		var circle = svg.append("circle")
+		.attr("class", "frame")
+		.attr("cx", 50)
+		.attr("cy", 50)
+		.attr("r", 25);
+
+		function transition(){
+		circle
+		.style("fill", blue)
+		.tansition()
+		.duration(duration)
+		.style("fill", red);
+		}

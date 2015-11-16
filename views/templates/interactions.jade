@@ -1,0 +1,21 @@
+extends ../layout
+block content
+
+	script.
+		var svg = d3.select("body").append("svg")
+		.attr("width", 800)
+		.attr("height", 400);
+
+		svg.on('click', function () {
+		var e = d3.event;
+
+		//Get relative cursor position
+		var xpos = (e.offsetX == undefined) ? e.layerX : e.offsetX;
+		var ypos = (e.offsetY == undefined) ? e.layerY : e.offsetY;
+
+		svg.append("circle")
+		.attr("cx", xpos)
+		.attr("cy", ypos)
+		.style("fill", "steelblue")
+		.attr("r", 50);
+		});

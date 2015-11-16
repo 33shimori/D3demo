@@ -1,0 +1,47 @@
+extends ../layout
+block content
+	button(onclick="transition()") click
+
+	script.
+		var svg = d3.select("body").append("svg")
+		.attr("width", 800)
+		.attr("height", 400);
+
+		var blue = d3.rgb(0,0,255);
+		var red = d3.rgb(255,0,0);
+		var duration = 2500;
+		// elements per row
+		var epr = 15;
+
+		var data = [];
+		for(var i =0; i<105; i++){
+			data.push(i);
+			}
+		var circles = svg.selectAll("circle")
+		.data(data).enter()
+		.append("circle")
+		.attr("cx", function (d,i) {return (i%epr +1) *50; })
+		.attr("cy", function (d,i) {return Math.floor(i/epr +1)*50; })
+		.attr("r", 25);
+		/*
+		function transition () {
+		circles
+		.style("fill", blue)
+		.transition()
+		.delay(function (d,i){ return i*100; })
+		.duration(duration)
+		.style("fill", red);
+		};*/
+		function transition(){
+		circles
+		.style("fill", blue)
+		.transition()
+		.delay(function (d,i){ return i*100; })
+		.duration(duration)
+		.style("fill", red)
+		.each ("end", function () {
+		d3.select(this)
+		.transition()
+		.attr("r", 15);
+		});
+		};

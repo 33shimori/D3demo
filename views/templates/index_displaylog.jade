@@ -1,0 +1,5 @@
+extends ../layoutangulardirective
+block content
+	div(ng-controller="displaylogCtrl")
+		my-scatter-chart.chart(data="log.data")
+	div {{log.data}}

@@ -7,6 +7,51 @@ return d3;
 });
 
 angular.module('main').
+	factory('classifier', function () {
+	return function (data, key){
+		return d3.nest()
+		.key(key)
+		.entries(data)
+		.map(function (d){
+			return {
+			time: d.key,
+				visitors: d.values.length
+			};
+		});
+	};
+});
+
+// Parser service
+angular.module('main').
+	factory('stringParser', function(){
+	return function(str, line, word, rem){
+		line = line || "\n";
+		word = word || /[-"]/gi;
+		rem = rem || /["\[\]]/gi;
+
+		return str.trim().split(line).map(function(l){
+			return l.split(word).map(function(w){
+				return w.trim().replace(rem,'');
+      });
+    });
+  };
+})
+
+angular.module('main').
+	factory('simpleD3Loader', function (d3){
+		return function (url, callback){
+			d3.text(url, 'text/plan', callback);
+    };
+});
+
+angular.module('main').
+	factory('simpleHttpLoader', function ($http){
+	return function (url){
+		return $http.get(url);
+  };
+});
+
+angular.module('main').
 	directive('myScatterChart', function (d3){
 
 	function draw (svg, width, height, data){
@@ -18,20 +63,19 @@ angular.module('main').
 		var margin = 30;
 		// Define x-scale
 		var xScale = d3.time.scale()
-		.domain([
-			d3.min(data, function(d){ return d.time; }),
-			d3.max(data, function(d){ return d.time; })
-    ])
+		.domain(
+			d3.extent(data,function (d) { return d.x; })
+    )
 		.range([margin, width-margin]);
 		// Define x-axis
 		var xAxis = d3.svg.axis()
 		.scale(xScale)
 		.orient('top')
-		.tickFormat(d3.time.format('%S'));
+		.tickFormat(d3.time.format('%H:%M'));
 
 		// Define y-scale
 		var yScale = d3.scale.linear()
-		.domain([0, d3.max(data, function (d){ return d.visitors; })
+		.domain([0, d3.max(data, function (d){ return d.y; })
 		])
 		.range([margin, height-margin]);
 		//Define y-axis
@@ -57,8 +101,8 @@ angular.module('main').
 		svg.select('.data')
 		.selectAll('circle').data(data)
 		.attr('r', 2.5)
-		.attr('cx', function(d){  return xScale(d.time); })
-		.attr('cy', function(d){  return yScale(d.visitors);});
+		.attr('cx', function(d){  return xScale(d.x); })
+		.attr('cy', function(d){  return yScale(d.y);});
   }
 
 	return {
@@ -84,9 +128,16 @@ angular.module('main').
 
 		 // Watch the data attribute of the scope
 	 scope.$watch('data', function (newVal, oldVal, scope){
+		 // Map the data to internal format
+		 var data = scope.data.map(function (d){
+			 return{
+				 x: d.time,
+				 y: d.visitors
+       }
+     });
 
 		 // Update the chart
-		 draw(svg, width, height, scope.data);
+		 draw(svg, width, height, data);
    }, true);
 		};
     }
