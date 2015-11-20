@@ -5,6 +5,7 @@ block content
 		var svg = d3.select("body").append("svg")
 		.attr("width", 800)
 		.attr("height", 400);
+		/*
 
 		svg.on('click', function () {
 		var e = d3.event;
@@ -18,4 +19,22 @@ block content
 		.attr("cy", ypos)
 		.style("fill", "steelblue")
 		.attr("r", 50);
+		});
+		*/
+
+		var is_drawing = false;
+		svg.on('mousemove', function () {
+		var pos = d3.mouse(this);
+
+		if(is_drawing){
+			svg.append("circle")
+			.attr("cx", pos[0])
+			.attr("cy", pos[1])
+			.style("fill", "red")
+			.attr("r", 3);
+			}
+		}).on('mousedown', function (){
+			is_drawing=true;
+		}).on('mouseup', function (){
+			is_drawing_false;
 		});

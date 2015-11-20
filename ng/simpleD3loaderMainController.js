@@ -29,7 +29,10 @@ angular.module('main').
 		.entries(mapped);
 		$scope.log.data=grouped;
 	});
+	$scope.display = { cursor: []};
 
+	$scope.startDate = '2015-11-18T12:00:00+0000';
+	$scope.endDate = '2015-11-19T12:00:00+0000';
 
 	/*
 		 simpleD3loader($scope.log.src, function (data){

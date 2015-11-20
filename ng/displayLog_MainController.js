@@ -2,6 +2,10 @@ angular.module('main').
 	controller('displaylogCtrl', function ($scope, d3, simpleHttpLoader, stringParser, classifier){
 	// Formats date strings  22/Nov/2014:01:56:00 +0100
 	var formatter = d3.time.format("%d/%b/%Y:%H:%M:%S %Z");
+
+$scope.startDate = '2015-11-18T12:00:00';
+$scope.endDate = '2015-11-19T18:00:00';
+
 	$scope.log = {
 		// Soruce of the log file
 		src: 'files/access.log',
@@ -34,7 +38,7 @@ simpleHttpLoader($scope.log.src).then(function (response){
 		return Math.round(d.time / coeff) * coeff;
   });
 	// Use the grouped data for the chart
-	console.log(grouped);
+	//console.log(new Date(Number(grouped[0].time)));
 	$scope.log.data = grouped;
 });
 

@@ -1,0 +1,46 @@
+extends ../layout
+block content
+	script.
+		var width = 800, height = 200, margin = 15;
+
+		var svg = d3.select("body").append("svg")
+		.attr("width", width)
+		.attr("height", height);
+
+		var xScale = d3.scale.linear()
+		.range([margin, width - margin])
+		.domain([0, 10]);
+
+		var axis = d3.svg.axis()
+		.scale(xScale)
+		.orient('top');
+
+		var axisContainer = svg.append('g')
+		.attr('class', 'axis')
+		.attr('transform', 'translate(0,' + (height -margin)+ ')')
+		.call(axis);
+
+		var brush = d3.svg.brush()
+		.x(xScale);
+		var brushContainer = svg.append("g")
+		.attr("class", "brush")
+		.call(brush);
+
+		brushContainer.selectAll("rect")
+		.attr("y", 0)
+		.attr("height", height);
+
+		brush.on('brushend', function (){
+
+		// Use the current extent
+		xScale.domain(brush.extent());
+
+		// redraw the axis
+		axisContainer
+		.transition()
+		.duration(250)
+		.call(axis);
+
+		// Clear the brush
+		brushContainer.call(brush.clear());
+		});

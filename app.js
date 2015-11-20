@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(require('node-sass-middleware')({
   src: path.join(__dirname),
   dest: path.join(__dirname, 'public'),
-	debug: false
+	debug:true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 

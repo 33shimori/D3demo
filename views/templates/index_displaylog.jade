@@ -1,5 +1,9 @@
 extends ../layoutangulardirective
 block content
 	div(ng-controller="displaylogCtrl")
-		my-scatter-chart.chart(data="log.data")
-	div {{log.data}}
+		span Cursor:
+		span {{ display.cursor[0] | date: 'dd.MM.yyyy HH:mm' }} &nbsp
+		span {{ display.cursor[1] | number: 2 }}
+		div
+			my-line-chart.chart(data = "log.data", start-date = "startDate", end-date ="endDate")
+
