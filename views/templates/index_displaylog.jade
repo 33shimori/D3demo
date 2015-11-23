@@ -1,9 +1,12 @@
 extends ../layoutangulardirective
 block content
 	div(ng-controller="displaylogCtrl")
-		span Cursor:
-		span {{ display.cursor[0] | date: 'dd.MM.yyyy HH:mm' }} &nbsp
-		span {{ display.cursor[1] | number: 2 }}
+		my-brush-chart.chart(data="log.data", brush="display.date")
 		div
-			my-line-chart.chart(data = "log.data", start-date = "startDate", end-date ="endDate")
+			span Cursor:
+			span {{ display.cursor[0] | date: 'dd.MM.yyyy HH:mm' }} &nbsp
+			span {{ display.cursor[1] | number: 2 }}
+			div
+				my-line-chart.chart(data = "log.data", start-date="display.date[0]", end-date="display.date[1]")
+				my-bar-chart.chart(data="log.data", cursor="display.cursor")
 

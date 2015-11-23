@@ -539,8 +539,9 @@ angular.module('main').
 			// Return the link function
 		return function (scope, element, attrs){
 
+
 		 // Watch the data attribute of the scope
-	 scope.$watch('data', function (newVal, oldVal, scope){
+	 scope.$watch('[data,startDate, endDate]', function (newVal, oldVal, scope){
 		 // Update the chart
 		 if(scope.data){
 		 var data = filter(scope.data, scope.startDate, scope.endDate);
@@ -658,7 +659,7 @@ angular.module('main').
 		.exit()
 		.remove();
 
-		/* ----- cursor ---- */
+		// ----- cursor ----
 
 		var xCursor = svg.select('.x-cursor');
 		var yCursor = svg.select('.y-cursor');
@@ -948,3 +949,146 @@ angular.module('main').
     }
   };
 })//}}}
+
+// Brush Chart Directive
+angular.module('main').
+	directive('myBrushChart', function (d3){//{{{
+	function draw(svg,width, height, data, dispatch){
+		if(data && !data.length){
+			return;
+    }
+		svg
+			.attr('width', width)
+			.attr('height', height);
+
+		// define margin
+		var margin = 10;
+
+		// Define x scale
+		var xScale = d3.time.scale()
+		.domain(d3.extent(data, function (d) { return d.x; }))
+		.range ([margin, width - margin]);
+
+		// Define y scale
+		var yScale = d3.time.scale()
+		.domain([0, d3.max(data, function (d) { return d.y; })])
+		.range ([height-margin, margin]);
+
+		var easing = d3.ease('cubic');
+		var ease_type = 'cubic';
+		var max = d3.max(data, function (d){ return d.y });
+		var duration = 2500;
+
+		// Draw a line
+		var line0 = d3.svg.line()
+		.x(function (d) { return xScale(d.x)})
+		.y(function (d) { return yScale(0)})
+		.interpolate('cardinal');
+
+		var line1 = d3.svg.line()
+		.x(function (d){ return xScale(d.x); })
+		.y(function (d){ return yScale(d.y); })
+		.interpolate('cardinal');
+
+		svg.select("data-line")
+		.datum(data)
+		.attr("d", line0)
+		.transition()
+		.ease(ease_type)
+		.duration(duration)
+		.attr("d", line1);
+
+		// Draw a area
+		var area0 = d3.svg.area()
+		.x(function(d){ return xScale(d.x); })
+		.y0(yScale(0))
+		.y1(function(d) { return yScale(0); })
+		.interpolate('cardinal');
+
+		var area1 = d3.svg.area()
+		.x(function(d){ return xScale(d.x); })
+		.y0(yScale(0))
+		.y1(function(d) {return yScale(d.y); })
+		.interpolate('cardinal');
+
+		svg.select(".data-area")
+		.datum(data)
+		.attr("d", area0)
+		.transition()
+		.ease(ease_type)
+		.duration(duration)
+		.attr("d", area1);
+
+		var brush =d3.svg.brush()
+		.x(xScale)
+		.on('brushstart', function(){
+			dispatch.brushstart(brush);
+    })
+		.on('brush', function(){
+			dispatch.brush(brush);
+    })
+		.on('brushend', function(){
+			dispatch.brushend(brush);
+    });
+		svg.select('.brush')
+		.call(brush)
+			.selectAll('rect')
+			.attr('y', 0)
+			.attr('height', height-margin);
+
+  }
+
+	return {
+		restrict: 'E',
+		scope: {
+			data: "=",
+			brush: "="
+    },
+		compile: function (element, attrs, transclude){
+			// Create a SVG root element
+			var svg = d3.select(element[0]).append('svg');
+
+			//  Create container
+			var visCont = svg.append('g').attr('class', 'svg');
+			var dataCont = visCont.append('g').attr('class', 'data');
+			var brushCont = visCont.append('g').attr('class', 'brush');
+
+			dataCont.append('path').attr('class', 'data-line');
+			dataCont.append('path').attr('class', 'data-area');
+
+			// Initialize the brush events
+			var dispatch = d3.dispatch(
+				"brushstart", "brush", "brushend"
+      );
+
+			// Define the dimensinos for the chart
+			var width = 200, height = 50;
+
+			// Return the link function
+			return function (scope, element, attrs){
+
+				dispatch.on('brush', function (brush){
+					scope.$apply(function (){
+						scope.brush = brush.extent();
+					});
+				});
+				// Watch the data attribute of the scope
+				scope.$watch('data', function(newVal, oldVal, scope){
+
+					// Map the data to internal format
+					var data = scope.data.map(function (d){
+						return{
+							x: d.time,
+							y: d.visitors
+						}
+					});
+
+					// Update the chart
+					if (scope.data){
+						draw(svg, width, height, data, dispatch);
+					}
+				}, true);
+      };
+    }
+  };
+});//}}}
