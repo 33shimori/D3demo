@@ -28,7 +28,8 @@ block content
 		// Set a key fucntion to identify the elelments
 		function key(d,i){
 		return d.x + "#" + d.y;
-		}
+;
+}
 		// Bind data array to the Selection
 		var circles = svg.selectAll('circle').data(data, key);
 		// Add circles for new data
@@ -44,5 +45,4 @@ block content
 		circles.exit()
 		.remove()
 		}
-
 

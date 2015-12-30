@@ -289,7 +289,7 @@ angular.module('main').
 		// Draw a line
 		var line0 = d3.svg.line()
 		.x(function(d) { return xScale(d.x); })
-		.y(function(d) { return yScale(d.y); })
+		.y(function(d) { return yScale(0); })
 		.interpolate('cardinal').tension(0.95);
 
 		var line1 = d3.svg.line()
@@ -304,12 +304,11 @@ angular.module('main').
 		.ease(ease_type)
 		.duration(duration)
 		.attr("d", line1);
-
 		// Draw a area
 		var area0 = d3.svg.area()
 		.x(function (d){ return xScale(d.x); })
 		.y0(yScale(0))
-		.y1(function (d) { return yScale(d.y); })
+		.y1(function (d) { return yScale(0); })
 		.interpolate('cardinal').tension(0.95);
 
 		var area1 = d3.svg.area()
@@ -324,7 +323,8 @@ angular.module('main').
 		.transition()
 		.ease(ease_type)
 		.duration(duration)
-	/*	.attrTween("d", function () {
+		/*
+		.attrTween("d", function () {
 			var min = d3.min(data, function (d){ return d.y; });
 			var start = data.map(function (d){
 				return {
@@ -336,7 +336,8 @@ angular.module('main').
 				var interpolate = interpolatePoints(start, data);
 				return area(interpolate(t));
       };
-    });*/
+    })
+	 */
 	 .attr("d", area1);
 
 	/* cursor */
