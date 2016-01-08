@@ -1,0 +1,92 @@
+extends ../layout
+block content
+	style.
+		.axis path, .axis line {
+		fill: none;
+		stroke: rgba(0, 255, 0, 0.3);
+		shape-rendering: crispEdges;
+		}
+		.tick{
+		font: 10px sans-serif;
+		}
+	script.
+		var height = 250;
+		var width = 350;
+		var svg = d3.select('body').append('svg')
+		.attr("width", width)
+		.attr("height", height);
+		var svg_disp = svg.append('g').attr('class', 'display');
+		var svg_data = svg_disp.append('g').attr('class', 'data');
+		var svg_axis = svg_disp.append('g').attr('class', 'axis');
+
+		var svg_x_axis = svg_axis.append('g').attr('class', 'x-axis');
+		var svg_y_axis = svg_axis.append('g').attr('class', 'y-axis');
+
+		var margin = {top: 20, right: 20, bottom: 20, left: 40 };
+
+		//SCALE
+		var xScale = d3.scale.linear()
+		.domain([3,22])
+		.range([margin.left, width-margin.right]);
+		var yScale = d3.scale.linear()
+		.domain([0, 220])
+		.range([height - margin.bottom, margin.top ]);
+
+		//AXES
+		var x_axis = d3.svg.axis()
+		.scale(xScale)
+		.orient('bottom')
+		.ticks(19);
+		var axis_x_height = height - margin.bottom;
+		svg_x_axis
+		.attr("transform", "translate(0," + axis_x_height +")")
+		.call(x_axis.outerTickSize(-axis_x_height + margin.top));
+
+		var y_axis = d3.svg.axis()
+		.scale(yScale)
+		.orient('left')
+		.ticks(11);
+		svg_y_axis
+		.attr("transform", "translate(" + margin.left + ")")
+		.call(y_axis
+		.tickSize(-width +  margin.right + margin.left,  0));
+
+		//Data
+		data = [
+		[{x: 3, y0: 114,  y1: 208}, {x: 7, y0: 73, y1: 145}, {x: 11, y0: 44, y1: 98}, {x: 16, y0: 21, y1: 56}, {x: 22, y0: 10, y1: 26}]
+		//{x: 22, y: 10}, {x: 16, y: 21}, {x: 11, y: 44}, {x: 7, y: 73}, {x:3, y: 114}]
+		//{x: 3, y: 114}, {x: 7, y: 73}, {x: 11, y: 44}, {x: 16, y: 21 }, {x: 22, y: 10}]
+		];
+
+		var line = d3.svg.area()
+		.x(function(d) { return xScale(d.x); })
+		.y0(function(d) { return yScale(d.y0); })
+		.y1(function(d) { return yScale(d.y1); })
+		.interpolate('cardinal');
+
+		d3.select('.data')
+		.selectAll('path').data(data)
+		.enter()
+		.append('path')
+		.attr('class', 'data');
+
+		d3.select('.data').selectAll('path')
+		.attr('d', line)
+		.style('fill', 'rgb(255,191,0)')
+		.style('fill-opacity', '0.2')
+		.style('stroke', 'steelblue')
+		.style('stroke-width', '1px')
+		.style('stroke-opacity', '0.3')		;
+
+
+
+
+
+
+
+
+
+
+
+
+
